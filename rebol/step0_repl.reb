@@ -28,6 +28,6 @@ rep: func [str] [
     PRINT' EVAL READ' str
 ]
 
-while [true] [
+forever [
     print rep ask "user> "
 ]
