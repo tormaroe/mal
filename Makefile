@@ -112,7 +112,7 @@ ruby_RUNSTEP =    ruby ../$(2) $(3)
 rust_RUNSTEP =    ../$(2) $(3)
 scala_RUNSTEP =   sbt 'run-main $($(1))$(if $(3), $(3),)'
 vb_RUNSTEP =      mono ../$(2) --raw $(3)
-rebol_RUNSTEP =   rebol --quiet ../$(2) $(3)
+rebol_RUNSTEP =   rebol -c ../$(2) $(3)
 
 # Extra options to pass to runtest.py
 mal_TEST_OPTS = --start-timeout 60 --test-timeout 120
