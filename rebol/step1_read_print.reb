@@ -10,16 +10,19 @@ REBOL [
     }
 ]
 
+do load %reader.reb
+do load %printer.reb
+
 READ': func [str] [
-    str
+    read_str str
 ]
 
-EVAL: func [str] [
-    str
+EVAL: func [ast] [
+    ast
 ]
 
-PRINT': func [str] [
-    str
+PRINT': func [exp] [
+    pr_str exp
 ]
 
 rep: func [str] [
@@ -27,5 +30,7 @@ rep: func [str] [
 ]
 
 forever [
-    print rep ask "user> "
+    if error? result: try [print rep ask "user> " 'dummy] [
+        probe disarm result
+    ]
 ]
