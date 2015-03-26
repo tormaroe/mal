@@ -38,17 +38,14 @@ READ': func [str] [
     read_str str
 ]
 
-apply: func[f args] [
-    do compose [f (args)]
+apply: func [list] [
+    do compose [(first list/values) (skip list/values 1)]
 ]
 
-EVAL: func [ast env /local tmp f args] [
+EVAL: func [ast env] [
     either all [ equal? type? ast object!
                  equal? "(" ast/start ] [
-        tmp: eval_ast ast env
-        f: first tmp/values
-        args: skip tmp/values 1
-        apply :f args
+        apply eval_ast ast env
     ] [
         eval_ast ast env
     ]
@@ -65,6 +62,6 @@ rep: func [str] [
 forever [
     if error? result: try [print rep ask "user> " 'dummy] [
         tmp: disarm result
-        print tmp
+        print tmp/arg1
     ]
 ]
