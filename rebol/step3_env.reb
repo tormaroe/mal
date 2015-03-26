@@ -56,8 +56,8 @@ EVAL: func [ast env /local let-env tmp] [
                 print ["TMP" tmp]
                 forskip tmp/values 2 [
                     print "FOREACH"
-                    env/set first tmp/values
-                            EVAL second tmp/values let-env
+                    let-env/set first tmp/values
+                                EVAL second tmp/values let-env
                 ]
                 print "END FORSKIP"
                 EVAL pick ast/values 3 let-env
