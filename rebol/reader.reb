@@ -21,8 +21,8 @@ int: [opt #"-" some digit]
 ws: charset ", "
 chars: complement charset {\"}
 comment: [#";" [thru newline | to end]]
-special: charset "()[]{}'`~"
-symbolchars: charset [#"A" - #"Z" #"a" - #"z" #"0" - #"9" "-_`'?*+"]
+special: charset "()[]{}'`~@^^"
+symbolchars: charset [#"A" - #"Z" #"a" - #"z" #"0" - #"9" "-_`'?*+:"]
 symbol: [some symbolchars]
 string-literal: [#"^"" any [some chars | "\^"" | "\n" | "\r" | "\t" ]  #"^""]
 
@@ -50,11 +50,11 @@ read_atom: func [rdr /local token] [
     ] [to-word token]
 ]
 
-read_list: func [rdr /local ast token] [
+read_list: func [rdr /local ast token seq] [
     ast: copy []
-    rdr/next'
+    seq: seq-factory rdr/next'
     token: rdr/peek
-    while [not token = ")"] [
+    while [not token = seq/end] [
         if not token [
             make error! "expected ')', got EOF"
         ]
@@ -62,19 +62,28 @@ read_list: func [rdr /local ast token] [
         token: rdr/peek
     ]
     rdr/next'
-    ast
+    seq/values: ast
+    seq
 ]
 
-read_form: func [rdr] [
+read_form: func [rdr /local tmp] [
     either rdr/peek = "~@" [
-        rdr/next' compose/only [splice-unquote (read_form rdr)]
+        rdr/next' quick-list compose/only [splice-unquote (read_form rdr)]
     ] [
         switch/default first rdr/peek [
             #";" [none]
-            #"'" [rdr/next' compose/only [quote (read_form rdr)]]
-            #"`" [rdr/next' compose/only [quasiquote (read_form rdr)]]
-            #"~" [rdr/next' compose/only [unquote (read_form rdr)]]
+            #"'" [rdr/next' quick-list compose/only [quote (read_form rdr)]]
+            #"`" [rdr/next' quick-list compose/only [quasiquote (read_form rdr)]]
+            #"~" [rdr/next' quick-list compose/only [unquote (read_form rdr)]]
+            #"@" [rdr/next' quick-list compose/only [deref (read_form rdr)]]
+            #"^^" [
+                rdr/next' 
+                tmp: read_form rdr
+                quick-list compose/only [with-meta (read_form rdr) (tmp)]
+            ]
             #"(" [read_list rdr]
+            #"[" [read_list rdr]
+            #"{" [read_list rdr]
         ] [read_atom rdr]
     ]
 ]

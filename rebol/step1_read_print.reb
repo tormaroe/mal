@@ -10,6 +10,7 @@ REBOL [
     }
 ]
 
+do load %types.reb
 do load %reader.reb
 do load %printer.reb
 
@@ -31,6 +32,7 @@ rep: func [str] [
 
 forever [
     if error? result: try [print rep ask "user> " 'dummy] [
-        probe disarm result
+        tmp: disarm result
+        print tmp/arg1
     ]
 ]
