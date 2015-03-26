@@ -28,8 +28,8 @@ eval_ast: func [ast env /local eval-in-env] [
             select env to-string ast
         ]
         object! [
-            quick-list map :eval-in-env
-                           ast/values
+            quick-seq ast map :eval-in-env
+                              ast/values
         ]
     ] [ ast ]
 ]

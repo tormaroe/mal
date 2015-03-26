@@ -21,6 +21,14 @@ make-mal-list: does [
     make mal-seq [ start: copy "(" end: copy ")" ]
 ]
 
+quick-seq: func [prototype vs /local ret] [
+    make mal-seq [
+        start: copy prototype/start
+        end: copy prototype/end
+        values: vs
+    ]
+]
+
 quick-list: func [vs /local ret] [
     ret: make-mal-list
     ret/values: vs

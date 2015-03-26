@@ -51,7 +51,10 @@ read_atom: func [rdr /local token] [
         either parse token [ some digit ] [
             to-integer token
         ] [
-            to-word token
+            switch/default first token [
+                #"^"" [ token ]
+                #":"  [ token ]
+            ] [ to-word token ]
         ]
     ]
 ]
