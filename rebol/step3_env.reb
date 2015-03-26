@@ -42,10 +42,29 @@ apply: func [list] [
     do compose [(first list/values) (skip list/values 1)]
 ]
 
-EVAL: func [ast env] [
+EVAL: func [ast env /local let-env tmp] [
     either all [ equal? type? ast object!
                  equal? "(" ast/start ] [
-        apply eval_ast ast env
+        switch/default first ast/values [
+            def! [ 
+                env/set pick ast/values 2 
+                        EVAL pick ast/values 3 env 
+            ]
+            let* [
+                let-env: make Env [ outer: env ]
+                tmp: pick ast/values 2
+                print ["TMP" tmp]
+                forskip tmp/values 2 [
+                    print "FOREACH"
+                    env/set first tmp/values
+                            EVAL second tmp/values let-env
+                ]
+                print "END FORSKIP"
+                EVAL pick ast/values 3 let-env
+            ]
+        ] [ 
+            apply eval_ast ast env 
+        ]
     ] [
         eval_ast ast env
     ]

@@ -22,7 +22,7 @@ ws: charset ", "
 chars: complement charset {\"}
 comment: [#";" [thru newline | to end]]
 special: charset "()[]{}'`~@^^"
-symbolchars: charset [#"A" - #"Z" #"a" - #"z" #"0" - #"9" "-_`'?*+:/"]
+symbolchars: charset [#"A" - #"Z" #"a" - #"z" #"0" - #"9" "-_`'?*+:/!"]
 symbol: [some symbolchars]
 string-literal: [#"^"" any [some chars | "\^"" | "\n" | "\r" | "\t" ]  #"^""]
 

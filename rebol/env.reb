@@ -6,10 +6,11 @@ Env: make object! [
     outer: none
     data: copy []
     set: func [key [word!] val] [
-        append/only append data to-string key :val
+        append/only append data key :val
+        :val
     ]
     find: func [key [word!] /local tmp] [
-        tmp: select data to-string key
+        tmp: select data key
         if none? :tmp [
             if not none? outer [
                 tmp: outer/find key
