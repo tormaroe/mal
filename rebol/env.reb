@@ -17,7 +17,7 @@ Env: make object! [
         tmp: select data key
         if none? :tmp [
             if not none? outer [
-                tmp: outer/find key
+                tmp: outer/find' key
             ]
         ]
         :tmp

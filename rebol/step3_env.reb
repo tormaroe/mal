@@ -47,20 +47,17 @@ EVAL: func [ast env /local let-env tmp] [
                  equal? "(" ast/start ] [
         switch/default first ast/values [
             def! [ 
-                env/set pick ast/values 2 
-                        EVAL pick ast/values 3 env 
+                env/set ast/values/2 
+                        EVAL ast/values/3 env 
             ]
             let* [
                 let-env: make Env [ outer: env ]
-                tmp: pick ast/values 2
-                print ["TMP" tmp]
-                forskip tmp/values 2 [
-                    print "FOREACH"
-                    let-env/set first tmp/values
-                                EVAL second tmp/values let-env
+                tmp: ast/values/2/values
+                forskip tmp 2 [
+                    let-env/set first tmp
+                                EVAL second tmp let-env
                 ]
-                print "END FORSKIP"
-                EVAL pick ast/values 3 let-env
+                EVAL ast/values/3 let-env
             ]
         ] [ 
             apply eval_ast ast env 
