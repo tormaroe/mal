@@ -66,7 +66,8 @@ EVAL: func [ast env /local let-env tmp] [
             ]
             if [
                 tmp: EVAL ast/values/2 env
-                either equal? tmp false or equal? tmp none [
+                either any [equal? tmp false
+                            none? tmp] [
                     either equal? length? ast/values 4 [
                         EVAL ast/values/4 env
                     ] [
