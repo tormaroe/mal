@@ -73,7 +73,7 @@ EVAL: func [ast env /local let-env tmp] [
                         none
                     ]
                 ] [
-                    EVAL ast/values/3
+                    EVAL ast/values/3 env
                 ]
             ]
             fn* [
