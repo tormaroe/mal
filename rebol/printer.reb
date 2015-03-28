@@ -11,13 +11,14 @@ map: func [projection xs /local new] [
 ]
 
 pr_str: func [ast] [
-    switch/default type?/word ast [
+    switch/default type?/word :ast [
         block! [join "" compose [form map :pr_str ast]]
         object! [
             join 
                 ast/start 
                 compose [(pr_str ast/values) ast/end]
         ]
+        function! [mold second :ast]
         none! ["nil"]
-    ] [to-string ast]
+    ] [to-string :ast]
 ]
